@@ -5,6 +5,13 @@
       北京理工大学国防科技园2号楼2222222222222222222222222222222222222222222
       <span class="iconfont position_notice">&#xe649;</span>
     </div>
+    <div class="search">
+      <span class="iconfont search__icon">&#xe725;</span>
+      山姆会员商店优惠商品
+    </div>
+    <div class="banner">
+      <img class="banner__img" src="http://www.dell-lee.com/imgs/vue3/banner.jpg" alt="">
+    </div>
   </div>
   <div class="docker">
     <span class="docker__item docker__item--active">
@@ -37,6 +44,32 @@
   bottom: .5rem;
   right: 0;
   padding: 0 .18rem;
+
+  .banner {
+    height: 0;
+    overflow: hidden;
+    padding-bottom: 25.4%;
+    .banner__img {
+      width: 100%;
+    }
+  }
+
+  .search {
+    line-height: .32rem;
+    background: #f1f1f1;
+    color: #b7b7b7;
+    border-radius: .16rem;
+    font-size: .14rem;
+    margin-bottom: .12rem;
+
+    .search__icon {
+      font-size: .2rem;
+      display: inline-block;
+      position: relative;
+      top: .03rem;
+      padding: 0 .12rem 0 .16rem;
+    }
+  }
 
   .position {
     position: relative;
