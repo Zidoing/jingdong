@@ -2,33 +2,64 @@
   <div class="wrapper">
     <img src="http://www.dell-lee.com/imgs/vue3/user.png" alt="" class="wrapper__img">
     <div class="wrapper__input">
-      <input type="text" class="wrapper__input__content" placeholder="请输入手机号">
+      <input type="text" v-model="data.username" class="wrapper__input__content" placeholder="请输入用户名">
     </div>
     <div class="wrapper__input">
       <input
         type="password"
         class="wrapper__input__content"
+        v-model="data.password"
         placeholder="请输入密码">
     </div>
     <div class="wrapper__input">
       <input
         type="password"
+        v-model="data.ensurement"
         class="wrapper__input__content"
         placeholder="确认密码">
     </div>
     <div class="wrapper__register-button" @click="handleRegister">注册</div>
     <div class="wrapper__register-link" @click="handleLoginClick">已有账号去登录</div>
+    <Toast v-if="toastData.showToast" :message="toastData.toastMessage"/>
   </div>
 </template>
 
 <script>
 import { useRouter } from 'vue-router'
+import { reactive } from 'vue'
+import Toast, { useToastEffect } from '@/components/Toast'
+import { post } from '@/utils/request'
 
 export default {
   name: 'Register',
+  components: { Toast },
   setup () {
     const router = useRouter()
-    const handleRegister = () => {
+    const data = reactive({
+      username: '',
+      password: '',
+      ensurement: ''
+    })
+
+    const {
+      toastData,
+      showToast
+    } = useToastEffect()
+
+    const handleRegister = async () => {
+      const result = await post('/api/user/register', {
+        username: data.username,
+        password: data.password,
+        ensurement: data.ensurement
+
+      })
+      console.log(result)
+      if (result?.errno !== 0) {
+        // localStorage.isLogin = true
+        router.push({ name: 'Login' })
+      } else {
+        showToast('注册失败')
+      }
     }
 
     const handleLoginClick = () => {
@@ -36,7 +67,9 @@ export default {
     }
     return {
       handleRegister,
-      handleLoginClick
+      handleLoginClick,
+      toastData,
+      data
     }
   }
 }
