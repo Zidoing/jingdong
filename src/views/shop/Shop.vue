@@ -7,33 +7,47 @@
         <input class="search__content__input" placeholder="请输入商品名称搜索">
       </div>
     </div>
-    <ShopInfo :item="item" :hide-border="true"/>
+    <ShopInfo :item="data.item" :hide-border="true"/>
+    <Content/>
   </div>
 </template>
 
 <script>
 import ShopInfo from '@/components/ShopInfo'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
+import { reactive } from 'vue'
+import { get } from '@/utils/request'
+import Content from '@/views/shop/Content'
 
 export default {
   name: 'Shop',
-  components: { ShopInfo },
+  components: {
+    Content,
+    ShopInfo
+  },
   setup () {
-    const item = {
-      _id: '1',
-      name: '111',
-      imgUrl: '13213',
-      sales: 111,
-      expressLimit: 0,
-      expressPrice: 22,
-      slogan: '321312'
+    const data = reactive({
+      item: {}
+    })
+
+    const route = useRoute()
+
+    const getItemData = async () => {
+      const result = await get(`/api/shop/${route.params.id}`)
+      console.log(result)
+      if (result?.errno === 0 && result?.data) {
+        data.item = result.data
+      }
     }
+
+    getItemData()
     const router = useRouter()
     const handleBackClick = () => {
       router.back()
     }
+
     return {
-      item,
+      data,
       handleBackClick
     }
   }
@@ -48,7 +62,7 @@ export default {
 .search {
   height: .32rem;
   display: flex;
-  margin: .2rem 0 .16rem 0;
+  margin: .14rem 0 .04rem 0;
 
   &__back {
     width: .3rem;
@@ -56,6 +70,7 @@ export default {
     text-align: center;
     line-height: .32rem;
     font-size: .2rem;
+    color: #b6b6b6;
   }
 
   &__content {
